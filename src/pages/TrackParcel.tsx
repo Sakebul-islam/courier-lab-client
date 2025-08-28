@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,12 +41,14 @@ export default function TrackParcel() {
   } = useForm<TrackingForm>();
 
   // Use the actual API query
-  const { data: apiResponse, error, isLoading, refetch } = useTrackParcelQuery(
-    trackingId,
-    {
-      skip: !trackingId || !isTracking,
-    }
-  );
+  const {
+    data: apiResponse,
+    error,
+    isLoading,
+    refetch,
+  } = useTrackParcelQuery(trackingId, {
+    skip: !trackingId || !isTracking,
+  });
 
   // Extract the actual parcel data from the API response
   const trackingResult = (apiResponse as any)?.data;
@@ -100,7 +103,7 @@ export default function TrackParcel() {
 
   const getStatusDisplayName = (status: string) => {
     if (!status) return "Unknown Status";
-    return status.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+    return status.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
   const formatAddress = (address: any) => {
@@ -175,7 +178,8 @@ export default function TrackParcel() {
                 )}
                 {Boolean(error) && (
                   <p className="text-red-500 text-sm">
-                    Failed to track parcel. Please check your tracking ID and try again.
+                    Failed to track parcel. Please check your tracking ID and
+                    try again.
                   </p>
                 )}
               </form>
@@ -190,11 +194,15 @@ export default function TrackParcel() {
           <div className="container mx-auto px-4 max-w-4xl">
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">Tracking Your Parcel...</CardTitle>
+                <CardTitle className="text-2xl">
+                  Tracking Your Parcel...
+                </CardTitle>
               </CardHeader>
               <CardContent className="text-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-muted-foreground">Please wait while we fetch your parcel information...</p>
+                <p className="text-muted-foreground">
+                  Please wait while we fetch your parcel information...
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -214,7 +222,9 @@ export default function TrackParcel() {
                     </CardDescription>
                   </div>
                   <Badge
-                    className={`px-4 py-2 text-lg ${getStatusColor(trackingResult.currentStatus)}`}
+                    className={`px-4 py-2 text-lg ${getStatusColor(
+                      trackingResult.currentStatus
+                    )}`}
                   >
                     <div className="flex items-center gap-2">
                       {getStatusIcon(trackingResult.currentStatus)}
@@ -260,10 +270,17 @@ export default function TrackParcel() {
                         {trackingResult.parcelDetails && (
                           <>
                             <div>Type: {trackingResult.parcelDetails.type}</div>
-                            <div>Weight: {trackingResult.parcelDetails.weight} kg</div>
-                            <div>Description: {trackingResult.parcelDetails.description}</div>
+                            <div>
+                              Weight: {trackingResult.parcelDetails.weight} kg
+                            </div>
+                            <div>
+                              Description:{" "}
+                              {trackingResult.parcelDetails.description}
+                            </div>
                             {trackingResult.parcelDetails.value && (
-                              <div>Value: ${trackingResult.parcelDetails.value}</div>
+                              <div>
+                                Value: ${trackingResult.parcelDetails.value}
+                              </div>
                             )}
                           </>
                         )}
@@ -301,8 +318,9 @@ export default function TrackParcel() {
                       <div className="flex items-center gap-2 text-muted-foreground">
                         <MapPin className="h-4 w-4" />
                         <span>
-                          {trackingResult.receiver && trackingResult.receiver.address 
-                            ? formatAddress(trackingResult.receiver.address) 
+                          {trackingResult.receiver &&
+                          trackingResult.receiver.address
+                            ? formatAddress(trackingResult.receiver.address)
                             : "Address not available"}
                         </span>
                       </div>
@@ -323,9 +341,9 @@ export default function TrackParcel() {
                       </span>
                     </div>
                     <div className="mt-2 text-sm text-muted-foreground">
-                      Base: ${trackingResult.pricing.baseFee} | 
-                      Weight: ${trackingResult.pricing.weightFee} | 
-                      Urgency: ${trackingResult.pricing.urgencyFee}
+                      Base: ${trackingResult.pricing.baseFee} | Weight: $
+                      {trackingResult.pricing.weightFee} | Urgency: $
+                      {trackingResult.pricing.urgencyFee}
                     </div>
                   </div>
                 )}
@@ -336,48 +354,52 @@ export default function TrackParcel() {
                     Delivery Timeline
                   </h3>
                   <div className="space-y-4">
-                    {trackingResult.statusHistory && trackingResult.statusHistory.map((event: any, index: number) => (
-                      <div key={index} className="flex gap-4">
-                        <div className="flex flex-col items-center">
-                          <div className="w-3 h-3 bg-primary rounded-full"></div>
-                          {index < trackingResult.statusHistory.length - 1 && (
-                            <div className="w-0.5 h-8 bg-muted mt-2"></div>
-                          )}
-                        </div>
-                        <div className="flex-1 pb-4">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-medium text-foreground">
-                              {getStatusDisplayName(event.status)}
-                            </h4>
-                            <Badge variant="outline" className="text-xs">
-                              {new Date(event.timestamp).toLocaleDateString(
-                                "en-US",
-                                {
-                                  month: "short",
-                                  day: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                }
+                    {trackingResult.statusHistory &&
+                      trackingResult.statusHistory.map(
+                        (event: any, index: number) => (
+                          <div key={index} className="flex gap-4">
+                            <div className="flex flex-col items-center">
+                              <div className="w-3 h-3 bg-primary rounded-full"></div>
+                              {index <
+                                trackingResult.statusHistory.length - 1 && (
+                                <div className="w-0.5 h-8 bg-muted mt-2"></div>
                               )}
-                            </Badge>
+                            </div>
+                            <div className="flex-1 pb-4">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-medium text-foreground">
+                                  {getStatusDisplayName(event.status)}
+                                </h4>
+                                <Badge variant="outline" className="text-xs">
+                                  {new Date(event.timestamp).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      month: "short",
+                                      day: "numeric",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    }
+                                  )}
+                                </Badge>
+                              </div>
+                              {event.location && (
+                                <p className="text-muted-foreground text-sm mb-1">
+                                  <MapPin className="h-3 w-3 inline mr-1" />
+                                  {event.location}
+                                </p>
+                              )}
+                              {event.note && (
+                                <p className="text-muted-foreground text-sm">
+                                  {event.note}
+                                </p>
+                              )}
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Updated by: {event.updatedBy}
+                              </p>
+                            </div>
                           </div>
-                          {event.location && (
-                            <p className="text-muted-foreground text-sm mb-1">
-                              <MapPin className="h-3 w-3 inline mr-1" />
-                              {event.location}
-                            </p>
-                          )}
-                          {event.note && (
-                            <p className="text-muted-foreground text-sm">
-                              {event.note}
-                            </p>
-                          )}
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Updated by: {event.updatedBy}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                        )
+                      )}
                   </div>
                 </div>
               </CardContent>

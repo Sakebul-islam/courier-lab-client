@@ -1,7 +1,7 @@
 import { footerNavItems, socialMediaLinks } from "@/config/navigation";
 import { Link } from "react-router";
 import Logo from "./Logo";
-import { Facebook, Twitter, Instagram, Linkedin, Github, Mail } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react";
 import type { ComponentType } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
