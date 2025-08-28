@@ -9,13 +9,13 @@ export default function Logo() {
       <div className="flex items-center mb-2">
         <img
           src={
-            theme === "dark" ? "/dropollo-icon-dark.png" : "/dropollo-icon.png"
+            theme === "dark" ? "/courierLab-icon-dark.png" : "/courierLab-icon.png"
           }
-          alt="Dropollo Logo"
+          alt="courierLab Logo"
           className="h-10 w-auto"
         />
         <span className="text-primary ml-2 mt-2 text-2xl font-bold ">
-          Dropollo
+        CourierLab
         </span>
       </div>
     </Link>

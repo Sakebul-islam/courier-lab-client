@@ -45,15 +45,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <img
               src={
                 theme === "dark"
-                  ? "/dropollo-icon-dark.png"
-                  : "/dropollo-icon.png"
+                  ? "/courierLab-icon-dark.png"
+                  : "/courierLab-icon.png"
               }
-              alt="Dropollo Logo"
+              alt="Courier Lab Logo"
               className={`h-8 w-auto ${!isOpen && "h-fit w-fit"}`}
             />
             {isOpen && (
               <span className="text-primary ml-2 mt-2 text-lg font-bold">
-                Dropollo Dashboard
+                Courier Lab Dashboard
               </span>
             )}
           </div>

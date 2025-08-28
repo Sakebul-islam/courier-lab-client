@@ -79,9 +79,9 @@ export default function Contact() {
       icon: <Mail className="h-6 w-6 text-primary" />,
       title: "Email Support",
       details: [
-        "General: info@dropollo.com",
-        "Support: support@dropollo.com",
-        "Sales: sales@dropollo.com",
+        "General: info@courierLab.com",
+        "Support: support@courierLab.com",
+        "Sales: sales@courierLab.com",
       ],
       description: "Response within 2-4 hours",
     },
@@ -114,7 +114,7 @@ export default function Contact() {
       address: "123 Business Ave, Suite 100",
       zipCode: "10001",
       phone: "+1 (555) 123-4567",
-      email: "nyc@dropollo.com",
+      email: "nyc@courierLab.com",
       hours: "8:00 AM - 8:00 PM EST",
     },
     {
@@ -123,7 +123,7 @@ export default function Contact() {
       address: "456 Commerce Blvd, Floor 2",
       zipCode: "90210",
       phone: "+1 (555) 123-4568",
-      email: "la@dropollo.com",
+      email: "la@courierLab.com",
       hours: "8:00 AM - 8:00 PM PST",
     },
     {
@@ -132,7 +132,7 @@ export default function Contact() {
       address: "789 Corporate Dr, Unit 300",
       zipCode: "60601",
       phone: "+1 (555) 123-4569",
-      email: "chicago@dropollo.com",
+      email: "chicago@courierLab.com",
       hours: "8:00 AM - 8:00 PM CST",
     },
   ];
@@ -503,7 +503,7 @@ export default function Contact() {
               variant="outline"
               className="text-lg px-8 py-6 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
             >
-              <Link to="mailto:info@dropollo.com">Email Us</Link>
+              <Link to="mailto:info@courierLab.com">Email Us</Link>
             </Button>
           </div>
         </div>

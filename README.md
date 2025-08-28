@@ -71,7 +71,7 @@ Create a `.env` file in the root directory:
 
 ```env
 # API Configuration
-VITE_API_BASE_URL=https://dropollo-api.vercel.app/api/v1
+VITE_API_BASE_URL=https://courier-lab-api.vercel.app/api/v1
 
 # Frontend Configuration
 VITE_APP_NAME=Dropollo

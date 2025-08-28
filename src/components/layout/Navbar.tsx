@@ -98,11 +98,6 @@ export default function Component() {
                         </NavigationMenuItem>
                       )}
                     </>
-                    // <NavigationMenuItem key={index} className="w-full">
-                    //   <NavigationMenuLink href={link.href} className="py-1.5">
-                    //     {link.label}
-                    //   </NavigationMenuLink>
-                    // </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
               </NavigationMenu>
@@ -138,14 +133,6 @@ export default function Component() {
                       </NavigationMenuItem>
                     )}
                   </>
-                  // <NavigationMenuItem key={index}>
-                  //   <NavigationMenuLink
-                  //     asChild
-                  //     className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                  //   >
-                  //     <Link to={link.href}>{link.label}</Link>
-                  //   </NavigationMenuLink>
-                  // </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
             </NavigationMenu>

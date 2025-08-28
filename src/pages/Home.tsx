@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock, MapPin, Shield, Truck, Users } from "lucide-react";
@@ -45,9 +44,6 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary/10 via-background to-background py-20">
         <div className="container mx-auto px-4 text-center">
-          <Badge variant="secondary" className="mb-4">
-            🚀 Trusted by 50,000+ customers
-          </Badge>
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             Fast & Secure
             <span className="text-primary block">Parcel Delivery</span>
@@ -88,7 +84,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Why Choose Dropollo?
+              Why Choose Courier Lab?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               We provide comprehensive shipping solutions with cutting-edge technology 
@@ -122,7 +118,7 @@ export default function Home() {
             Ready to Ship?
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-            Join thousands of satisfied customers who trust Dropollo for their shipping needs. 
+            Join thousands of satisfied customers who trust Courier Lab for their shipping needs. 
             Get started today with our easy-to-use platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

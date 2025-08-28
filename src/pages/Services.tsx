@@ -244,7 +244,7 @@ export default function Services() {
       <section className="bg-primary text-primary-foreground py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">
-            Ready to Ship with Dropollo?
+            Ready to Ship with Courier Lab?
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
             Choose the perfect shipping solution for your needs and experience 

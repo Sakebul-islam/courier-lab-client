@@ -103,14 +103,14 @@ export default function About() {
       <section className="text-center mb-20">
         <div className="container mx-auto px-4">
           <Badge variant="secondary" className="mb-4">
-            🏢 About Dropollo
+            🏢 About courierLab
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Your Trusted Partner in
             <span className="text-primary block">Parcel Delivery</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Founded in 2018, Dropollo has been revolutionizing the parcel delivery industry 
+            Founded in 2018, courierLab has been revolutionizing the parcel delivery industry 
             with innovative technology, exceptional service, and unwavering commitment to customer satisfaction.
           </p>
         </div>
@@ -186,7 +186,7 @@ export default function About() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-foreground mb-4">
-              Dropollo by the Numbers
+            courierLab by the Numbers
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Our growth and impact in numbers
@@ -337,7 +337,7 @@ export default function About() {
       <section className="bg-primary text-primary-foreground py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">
-            Join the Dropollo Family
+            Join the courierLab Family
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
             Experience the difference that quality, reliability, and innovation make in parcel delivery. 

@@ -64,27 +64,27 @@ export const footerNavItems = {
 export const socialMediaLinks = [
   {
     name: "Facebook",
-    href: "https://facebook.com/dropollo",
+    href: "https://facebook.com/courierLab",
     icon: "facebook",
   },
   {
     name: "Twitter",
-    href: "https://twitter.com/dropollo",
+    href: "https://twitter.com/courierLab",
     icon: "twitter",
   },
   {
     name: "Instagram",
-    href: "https://instagram.com/dropollo",
+    href: "https://instagram.com/courierLab",
     icon: "instagram",
   },
   {
     name: "LinkedIn",
-    href: "https://linkedin.com/company/dropollo",
+    href: "https://linkedin.com/company/courierLab",
     icon: "linkedin",
   },
   {
     name: "GitHub",
-    href: "https://github.com/dropollo",
+    href: "https://github.com/courierLab",
     icon: "github",
   },
 ];
