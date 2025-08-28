@@ -45,16 +45,9 @@ const QuoteSchema = z.object({
     .max(80, { message: "Name must be under 80 characters." }),
   email: z.string().email({ message: "Please enter a valid email." }),
   weight: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .pipe(
-      z
-        .number({
-          message: "Weight must be a valid number",
-        })
-        .positive({ message: "Weight must be greater than 0" })
-        .max(1000, { message: "Weight must be ≤ 1000 kg" })
-    ),
+    .number({ message: "Weight must be a valid number" })
+    .positive({ message: "Weight must be greater than 0" })
+    .max(1000, { message: "Weight must be ≤ 1000 kg" }),
 });
 
 export type QuoteForm = z.infer<typeof QuoteSchema>;
@@ -601,6 +594,9 @@ export default function Home() {
                               step={0.1}
                               placeholder="2.5"
                               {...field}
+                              onChange={(e) =>
+                                field.onChange(parseFloat(e.target.value) || 0)
+                              }
                             />
                           </FormControl>
                           <FormMessage />
