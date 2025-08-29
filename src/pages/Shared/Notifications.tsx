@@ -59,15 +59,13 @@ export default function Notifications() {
     refetch,
   } = useGetUserNotificationsQuery(undefined);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const newNotifications = apiNotifications?.data || [];
-
   // Update local state when API data changes
   useEffect(() => {
+    const newNotifications = apiNotifications?.data || [];
     if (newNotifications) {
       setNotifications(newNotifications);
     }
-  }, [newNotifications]);
+  }, [apiNotifications]);
 
   const markAsRead = (id: string) => {
     setNotifications((prev) =>
