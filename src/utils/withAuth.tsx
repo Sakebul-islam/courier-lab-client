@@ -1,43 +1,51 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserInfoQuery } from "@/redux/feature/auth/auth.api";
 import type { TRole } from "@/types";
-import { Navigate } from "react-router";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 export const withAuth = (
   Component: React.ComponentType,
   requiredRole?: TRole
 ) => {
   return function AuthWrapper() {
-    const [hasToken, setHasToken] = useState<boolean | null>(null);
-    const [shouldFetch, setShouldFetch] = useState(false);
+    const [authState, setAuthState] = useState<
+      "checking" | "authenticated" | "unauthenticated"
+    >("checking");
+    const navigate = useNavigate();
 
-    useEffect(() => {
-      // Check if token exists in localStorage
-      const token = localStorage.getItem("accessToken");
-      setHasToken(!!token);
+    // Check token once on mount
+    const token = localStorage.getItem("accessToken");
 
-      // Add a longer delay before fetching to ensure token is properly set
-      if (token) {
-        console.log("🔍 withAuth found token:", token.substring(0, 50) + "...");
-        const timer = setTimeout(() => {
-          console.log("⏰ withAuth ready to fetch user info");
-          setShouldFetch(true);
-        }, 1000);
-        return () => clearTimeout(timer);
-      } else {
-        console.log("❌ withAuth: No token found in localStorage");
-        setShouldFetch(false);
-      }
-    }, []); // Empty dependency array to run only once
-
-    // Skip the query if no token is found or shouldFetch is false
+    // Skip query if no token
     const { data, isLoading, isError } = useUserInfoQuery(undefined, {
-      skip: !hasToken || !shouldFetch,
+      skip: !token,
     });
 
-    // Show loading skeleton while checking token or fetching user data
-    if (hasToken === null || (hasToken && isLoading && shouldFetch)) {
+    useEffect(() => {
+      if (!token) {
+        setAuthState("unauthenticated");
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      if (isError || (!isLoading && !data?.data?.email)) {
+        setAuthState("unauthenticated");
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      if (data?.data?.email) {
+        if (requiredRole && data.data.role !== requiredRole) {
+          navigate("/unauthorized", { replace: true });
+          return;
+        }
+        setAuthState("authenticated");
+      }
+    }, [token, data, isLoading, isError, navigate, requiredRole]);
+
+    // Show loading while checking auth
+    if (authState === "checking" || (token && isLoading)) {
       return (
         <div className="min-h-screen bg-background p-6">
           <div className="max-w-4xl mx-auto space-y-6">
@@ -61,22 +69,12 @@ export const withAuth = (
       );
     }
 
-    // If no token exists, redirect to login
-    if (hasToken === false) {
-      return <Navigate to="/login" replace />;
+    // Only render component if authenticated
+    if (authState === "authenticated") {
+      return <Component />;
     }
 
-    // If there's an error or no user data after loading, redirect to login
-    if (isError || !data?.data?.email) {
-      return <Navigate to="/login" replace />;
-    }
-
-    // If role is required and user doesn't have the required role, redirect to unauthorized
-    if (requiredRole && data.data.role !== requiredRole) {
-      return <Navigate to="/unauthorized" replace />;
-    }
-
-    // User is authenticated and has the required role (if any), render the component
-    return <Component />;
+    // Return null while redirecting
+    return null;
   };
 };
