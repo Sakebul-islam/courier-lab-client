@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserInfoQuery } from "@/redux/feature/auth/auth.api";
 import type { TRole } from "@/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 export const withAuth = (
@@ -15,6 +15,15 @@ export const withAuth = (
     const [token, setToken] = useState<string | null>(null);
     const [tokenInitialized, setTokenInitialized] = useState(false);
     const navigate = useNavigate();
+
+    // Stabilize navigation functions
+    const navigateToLogin = useCallback(() => {
+      navigate("/login", { replace: true });
+    }, [navigate]);
+
+    const navigateToUnauthorized = useCallback(() => {
+      navigate("/unauthorized", { replace: true });
+    }, [navigate]);
 
     // Initialize token from localStorage only once
     useEffect(() => {
@@ -34,7 +43,7 @@ export const withAuth = (
 
       if (!token) {
         setAuthState("unauthenticated");
-        navigate("/login", { replace: true });
+        navigateToLogin();
         return;
       }
 
@@ -43,13 +52,13 @@ export const withAuth = (
 
       if (isError || !data?.data?.email) {
         setAuthState("unauthenticated");
-        navigate("/login", { replace: true });
+        navigateToLogin();
         return;
       }
 
       if (data?.data?.email) {
         if (requiredRole && data.data.role !== requiredRole) {
-          navigate("/unauthorized", { replace: true });
+          navigateToUnauthorized();
           return;
         }
         setAuthState("authenticated");
@@ -60,8 +69,9 @@ export const withAuth = (
       data,
       isLoading,
       isError,
-      navigate,
       requiredRole,
+      navigateToLogin,
+      navigateToUnauthorized,
     ]);
 
     // Show loading while checking auth or waiting for API
