@@ -13,27 +13,35 @@ export const withAuth = (
       "checking" | "authenticated" | "unauthenticated"
     >("checking");
     const [token, setToken] = useState<string | null>(null);
+    const [tokenInitialized, setTokenInitialized] = useState(false);
     const navigate = useNavigate();
 
     // Initialize token from localStorage only once
     useEffect(() => {
       const storedToken = localStorage.getItem("accessToken");
       setToken(storedToken);
+      setTokenInitialized(true);
     }, []);
 
-    // Skip query if no token
+    // Skip query if no token or token not initialized yet
     const { data, isLoading, isError } = useUserInfoQuery(undefined, {
-      skip: !token,
+      skip: !token || !tokenInitialized,
     });
 
     useEffect(() => {
+      // Don't process auth logic until token is initialized
+      if (!tokenInitialized) return;
+
       if (!token) {
         setAuthState("unauthenticated");
         navigate("/login", { replace: true });
         return;
       }
 
-      if (isError || (!isLoading && !data?.data?.email)) {
+      // Wait for API call to complete before making decisions
+      if (isLoading) return;
+
+      if (isError || !data?.data?.email) {
         setAuthState("unauthenticated");
         navigate("/login", { replace: true });
         return;
@@ -46,10 +54,18 @@ export const withAuth = (
         }
         setAuthState("authenticated");
       }
-    }, [token, data, isLoading, isError, navigate, requiredRole]);
+    }, [
+      token,
+      tokenInitialized,
+      data,
+      isLoading,
+      isError,
+      navigate,
+      requiredRole,
+    ]);
 
-    // Show loading while checking auth
-    if (authState === "checking" || (token && isLoading)) {
+    // Show loading while checking auth or waiting for API
+    if (!tokenInitialized || authState === "checking" || (token && isLoading)) {
       return (
         <div className="min-h-screen bg-background p-6">
           <div className="max-w-4xl mx-auto space-y-6">
