@@ -142,7 +142,57 @@ export function LoginForm({
         </div>
         <Button
           onClick={() => {
-            window.open(`${config.apiBaseUrl}/auth/google`, "_blank");
+            const popup = window.open(
+              `${config.apiBaseUrl}/auth/google`,
+              "googleLogin",
+              "width=500,height=600,scrollbars=yes,resizable=yes"
+            );
+
+            // Listen for messages from the popup
+            const handleMessage = (event: MessageEvent) => {
+              // Verify origin for security
+              if (event.origin !== window.location.origin) {
+                return;
+              }
+
+              if (event.data.type === "GOOGLE_AUTH_SUCCESS") {
+                const { accessToken, user } = event.data;
+
+                // Store the access token
+                if (accessToken) {
+                  localStorage.setItem("accessToken", accessToken);
+                  console.log("✅ Google OAuth token stored successfully");
+                }
+
+                toast.success("Google login successful!");
+
+                // Navigate to dashboard based on user role
+                if (user?.role) {
+                  const dashboardRoute = getDashboardRoute(user.role);
+                  navigate(dashboardRoute);
+                } else {
+                  navigate("/");
+                }
+
+                // Clean up
+                popup?.close();
+                window.removeEventListener("message", handleMessage);
+              } else if (event.data.type === "GOOGLE_AUTH_ERROR") {
+                toast.error("Google login failed. Please try again.");
+                popup?.close();
+                window.removeEventListener("message", handleMessage);
+              }
+            };
+
+            window.addEventListener("message", handleMessage);
+
+            // Handle popup being closed manually
+            const checkClosed = setInterval(() => {
+              if (popup?.closed) {
+                clearInterval(checkClosed);
+                window.removeEventListener("message", handleMessage);
+              }
+            }, 1000);
           }}
           variant="outline"
           className="w-full"

@@ -3,6 +3,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { role } from "@/constant/role";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import GoogleCallback from "@/pages/GoogleCallback";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Pricing from "@/pages/Pricing";
@@ -93,5 +94,9 @@ export const router = createBrowserRouter([
   {
     Component: Unauthorized,
     path: "unauthorized",
+  },
+  {
+    Component: GoogleCallback,
+    path: "auth/google/callback",
   },
 ]);

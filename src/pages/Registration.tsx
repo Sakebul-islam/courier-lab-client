@@ -9,17 +9,15 @@ import { ArrowLeft } from "lucide-react";
 import { Link, Navigate } from "react-router";
 
 export default function Registration() {
-  // Only fetch user info if token exists
   const token = localStorage.getItem("accessToken");
   const { data, isLoading } = useUserInfoQuery(undefined, {
-    skip: !token, // Skip query if no token
+    skip: !token,
   });
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <div className="w-full max-w-md space-y-6">
-          {/* Header Skeleton */}
           <div className="text-center space-y-2">
             <Skeleton className="h-8 w-40 mx-auto bg-gray-200 dark:bg-gray-700" />
             <Skeleton className="h-4 w-56 mx-auto bg-gray-200 dark:bg-gray-700" />
