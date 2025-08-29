@@ -9,7 +9,11 @@ import { ArrowLeft } from "lucide-react";
 import { Link, Navigate } from "react-router";
 
 export default function Registration() {
-  const { data, isLoading } = useUserInfoQuery(undefined);
+  // Only fetch user info if token exists
+  const token = localStorage.getItem("accessToken");
+  const { data, isLoading } = useUserInfoQuery(undefined, {
+    skip: !token, // Skip query if no token
+  });
 
   if (isLoading) {
     return (
