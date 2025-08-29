@@ -38,11 +38,11 @@ export const withAuth = (
 
     // Skip the query if no token is found or shouldFetch is false
     const { data, isLoading, isError } = useUserInfoQuery(undefined, {
-      skip: hasToken === false || !shouldFetch,
+      skip: !hasToken || !shouldFetch,
     });
 
     // Show loading skeleton while checking token or fetching user data
-    if (hasToken === null || (hasToken && isLoading)) {
+    if (hasToken === null || (hasToken && isLoading && shouldFetch)) {
       return (
         <div className="min-h-screen bg-background p-6">
           <div className="max-w-4xl mx-auto space-y-6">
