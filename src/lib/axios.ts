@@ -83,27 +83,6 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Handle 500 errors that might be token-related
-    if (
-      error.response?.status === 500 &&
-      originalRequest.url?.includes("/auth/me") &&
-      (error.response?.data?.message === "invalid token" ||
-        error.response?.data?.message === "jwt malformed" ||
-        error.response?.data?.message?.includes("token")) &&
-      !originalRequest._retry
-    ) {
-      console.log("🔄 500 error on /auth/me with token-related message");
-      originalRequest._retry = true;
-
-      console.log("⚠️ Token-related 500 error, clearing token");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
-      return Promise.reject(error);
-    }
-
     if (
       error.response.status === 500 &&
       error.response.data.message === "jwt expired" &&
