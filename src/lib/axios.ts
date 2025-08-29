@@ -13,6 +13,9 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem("accessToken");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log(" Token added to request:", config.url);
+    } else {
+      console.log(" No token found for request:", config.url);
     }
 
     return config;
@@ -51,6 +54,62 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config as AxiosRequestConfig & {
       _retry: boolean;
     };
+
+    console.log("🚨 API Error:", {
+      status: error.response?.status,
+      url: originalRequest.url,
+      message: error.response?.data?.message,
+      data: error.response?.data,
+    });
+
+    // Handle token expiration or invalid token (401/403)
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry
+    ) {
+      console.log(
+        "🔒 Authentication error, clearing token and redirecting to login"
+      );
+      // Clear invalid token
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      // Redirect to login if not already on login page
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+
+      return Promise.reject(error);
+    }
+
+    // Handle 500 errors that might be token-related
+    if (
+      error.response?.status === 500 &&
+      originalRequest.url?.includes("/auth/me") &&
+      !originalRequest._retry
+    ) {
+      console.log("🔄 500 error on /auth/me, might be token issue");
+      originalRequest._retry = true;
+
+      // Try to refresh token or clear invalid token
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.log("❌ No token found, redirecting to login");
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
+        return Promise.reject(error);
+      }
+
+      // If we have a token but getting 500, it might be invalid
+      console.log("⚠️ Token exists but getting 500, clearing token");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
+      }
+      return Promise.reject(error);
+    }
 
     if (
       error.response.status === 500 &&

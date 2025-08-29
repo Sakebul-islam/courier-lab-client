@@ -60,9 +60,13 @@ export function LoginForm({
       // Store the access token
       if (response?.data?.accessToken) {
         localStorage.setItem("accessToken", response.data.accessToken);
+        console.log("✅ Token stored successfully");
       }
 
       toast.success("Login successful!");
+
+      // Add a small delay to ensure token is stored before navigation
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
       // Navigate to dashboard based on user role
       if (response?.data?.user?.role && !isLoading) {
