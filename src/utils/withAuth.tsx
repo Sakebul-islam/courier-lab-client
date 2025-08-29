@@ -12,10 +12,14 @@ export const withAuth = (
     const [authState, setAuthState] = useState<
       "checking" | "authenticated" | "unauthenticated"
     >("checking");
+    const [token, setToken] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    // Check token once on mount
-    const token = localStorage.getItem("accessToken");
+    // Initialize token from localStorage only once
+    useEffect(() => {
+      const storedToken = localStorage.getItem("accessToken");
+      setToken(storedToken);
+    }, []);
 
     // Skip query if no token
     const { data, isLoading, isError } = useUserInfoQuery(undefined, {
