@@ -87,23 +87,15 @@ axiosInstance.interceptors.response.use(
     if (
       error.response?.status === 500 &&
       originalRequest.url?.includes("/auth/me") &&
+      (error.response?.data?.message === "invalid token" ||
+        error.response?.data?.message === "jwt malformed" ||
+        error.response?.data?.message?.includes("token")) &&
       !originalRequest._retry
     ) {
-      console.log("🔄 500 error on /auth/me, might be token issue");
+      console.log("🔄 500 error on /auth/me with token-related message");
       originalRequest._retry = true;
 
-      // Try to refresh token or clear invalid token
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        console.log("❌ No token found, redirecting to login");
-        if (window.location.pathname !== "/login") {
-          window.location.href = "/login";
-        }
-        return Promise.reject(error);
-      }
-
-      // If we have a token but getting 500, it might be invalid
-      console.log("⚠️ Token exists but getting 500, clearing token");
+      console.log("⚠️ Token-related 500 error, clearing token");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       if (window.location.pathname !== "/login") {
