@@ -25,7 +25,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     login: builder.mutation<
-      IResponse<{ user: IUser; accessToken: string }>,
+      IResponse<{ user: IUser; accessToken: string; refreshToken: string }>,
       LoginData
     >({
       query: (userData) => ({

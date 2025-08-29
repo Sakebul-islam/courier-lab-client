@@ -10,16 +10,29 @@ export const withAuth = (
 ) => {
   return function AuthWrapper() {
     const [hasToken, setHasToken] = useState<boolean | null>(null);
+    const [shouldFetch, setShouldFetch] = useState(false);
 
     useEffect(() => {
       // Check if token exists in localStorage
       const token = localStorage.getItem("accessToken");
       setHasToken(!!token);
+
+      // Add a longer delay before fetching to ensure token is properly set
+      if (token) {
+        console.log("🔍 withAuth found token:", token.substring(0, 50) + "...");
+        const timer = setTimeout(() => {
+          console.log("⏰ withAuth ready to fetch user info");
+          setShouldFetch(true);
+        }, 300);
+        return () => clearTimeout(timer);
+      } else {
+        console.log("❌ withAuth: No token found in localStorage");
+      }
     }, []);
 
-    // Skip the query if no token is found
+    // Skip the query if no token is found or shouldFetch is false
     const { data, isLoading, isError } = useUserInfoQuery(undefined, {
-      skip: hasToken === false,
+      skip: hasToken === false || !shouldFetch,
     });
 
     // Show loading skeleton while checking token or fetching user data

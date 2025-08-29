@@ -61,12 +61,16 @@ export function LoginForm({
       if (response?.data?.accessToken) {
         localStorage.setItem("accessToken", response.data.accessToken);
         console.log("✅ Token stored successfully");
+        console.log(
+          "🔍 Stored token preview:",
+          response.data.accessToken.substring(0, 50) + "..."
+        );
       }
 
       toast.success("Login successful!");
 
-      // Add a small delay to ensure token is stored before navigation
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      // Add a longer delay to ensure token is stored before navigation
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Navigate to dashboard based on user role
       if (response?.data?.user?.role && !isLoading) {
