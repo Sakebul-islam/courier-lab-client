@@ -55,6 +55,13 @@ export function LoginForm({
 
     try {
       const response = await login(userInfo).unwrap();
+      console.log(response);
+
+      // Store the access token
+      if (response?.data?.accessToken) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+      }
+
       toast.success("Login successful!");
 
       // Navigate to dashboard based on user role
@@ -62,7 +69,6 @@ export function LoginForm({
         const dashboardRoute = getDashboardRoute(response.data.user.role);
         navigate(dashboardRoute);
       } else {
-        // Fallback navigation if role is not available
         navigate("/");
       }
     } catch (error) {
