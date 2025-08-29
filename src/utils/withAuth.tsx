@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserInfoQuery } from "@/redux/feature/auth/auth.api";
 import type { TRole } from "@/types";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 export const withAuth = (
@@ -15,15 +15,7 @@ export const withAuth = (
     const [token, setToken] = useState<string | null>(null);
     const [tokenInitialized, setTokenInitialized] = useState(false);
     const navigate = useNavigate();
-
-    // Stabilize navigation functions
-    const navigateToLogin = useCallback(() => {
-      navigate("/login", { replace: true });
-    }, [navigate]);
-
-    const navigateToUnauthorized = useCallback(() => {
-      navigate("/unauthorized", { replace: true });
-    }, [navigate]);
+    const hasNavigated = useRef(false);
 
     // Initialize token from localStorage only once
     useEffect(() => {
@@ -43,7 +35,10 @@ export const withAuth = (
 
       if (!token) {
         setAuthState("unauthenticated");
-        navigateToLogin();
+        if (!hasNavigated.current) {
+          hasNavigated.current = true;
+          navigate("/login", { replace: true });
+        }
         return;
       }
 
@@ -52,27 +47,25 @@ export const withAuth = (
 
       if (isError || !data?.data?.email) {
         setAuthState("unauthenticated");
-        navigateToLogin();
+        if (!hasNavigated.current) {
+          hasNavigated.current = true;
+          navigate("/login", { replace: true });
+        }
         return;
       }
 
       if (data?.data?.email) {
         if (requiredRole && data.data.role !== requiredRole) {
-          navigateToUnauthorized();
+          if (!hasNavigated.current) {
+            hasNavigated.current = true;
+            navigate("/unauthorized", { replace: true });
+          }
           return;
         }
         setAuthState("authenticated");
+        hasNavigated.current = false; // Reset for future auth checks
       }
-    }, [
-      token,
-      tokenInitialized,
-      data,
-      isLoading,
-      isError,
-      requiredRole,
-      navigateToLogin,
-      navigateToUnauthorized,
-    ]);
+    }, [token, tokenInitialized, data, isLoading, isError, requiredRole]);
 
     // Show loading while checking auth or waiting for API
     if (!tokenInitialized || authState === "checking" || (token && isLoading)) {
