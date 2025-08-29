@@ -15,20 +15,26 @@ export const withAuth = (
     useEffect(() => {
       // Check if token exists in localStorage
       const token = localStorage.getItem("accessToken");
-      setHasToken(!!token);
+      const tokenExists = !!token;
+
+      // Only update state if it actually changed
+      if (hasToken !== tokenExists) {
+        setHasToken(tokenExists);
+      }
 
       // Add a longer delay before fetching to ensure token is properly set
-      if (token) {
+      if (token && !shouldFetch) {
         console.log("🔍 withAuth found token:", token.substring(0, 50) + "...");
         const timer = setTimeout(() => {
           console.log("⏰ withAuth ready to fetch user info");
           setShouldFetch(true);
         }, 1000);
         return () => clearTimeout(timer);
-      } else {
+      } else if (!token) {
         console.log("❌ withAuth: No token found in localStorage");
+        setShouldFetch(false);
       }
-    }, []);
+    }, []); // Empty dependency array to run only once
 
     // Skip the query if no token is found or shouldFetch is false
     const { data, isLoading, isError } = useUserInfoQuery(undefined, {
