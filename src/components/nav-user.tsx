@@ -62,6 +62,11 @@ export function NavUser({
   const handleLogout = async () => {
     try {
       await logout().unwrap();
+
+      // Clear tokens from localStorage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
       toast.success("Logged out successfully");
       dispatch(authApi.util.resetApiState());
       navigate("/login");
