@@ -23,7 +23,7 @@ export const withAuth = (
         const timer = setTimeout(() => {
           console.log("⏰ withAuth ready to fetch user info");
           setShouldFetch(true);
-        }, 300);
+        }, 1000);
         return () => clearTimeout(timer);
       } else {
         console.log("❌ withAuth: No token found in localStorage");
