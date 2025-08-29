@@ -22,7 +22,11 @@ import Logo from "./Logo";
 import { ThemeToggler } from "./ThemeToggler";
 
 export default function Component() {
-  const { data } = useUserInfoQuery(undefined);
+  // Only fetch user info if token exists
+  const token = localStorage.getItem("accessToken");
+  const { data } = useUserInfoQuery(undefined, {
+    skip: !token, // Skip query if no token
+  });
 
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
